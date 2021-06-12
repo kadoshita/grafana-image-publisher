@@ -1,0 +1,38 @@
+{
+  "name": "typescript-web-template",
+  "version": "0.0.1",
+  "description": "TypeScript用のWebアプリテンプレート",
+  "main": "dist/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack serve --open --mode development",
+    "watch": "webpack --watch --mode development",
+    "build": "webpack --mode production",
+    "lint": "eslint ./src/ --ext .ts",
+    "format": "prettier --write ./**/*.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kadoshita/typescript-web-template.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kadoshita/typescript-web-template/issues"
+  },
+  "homepage": "https://github.com/kadoshita/typescript-web-template#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.24.0",
+    "@typescript-eslint/parser": "^4.24.0",
+    "dotenv": "^10.0.0",
+    "eslint": "^7.26.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "prettier": "^2.3.0",
+    "ts-loader": "^9.2.1",
+    "typescript": "^4.2.4",
+    "webpack": "^5.37.1",
+    "webpack-cli": "^4.7.0",
+    "webpack-dev-server": "^3.11.2"
+  }
+}
