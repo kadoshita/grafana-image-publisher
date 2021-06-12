@@ -113,6 +113,11 @@ const getGrafanaGraph = async (params: GraphParam) => {
             'Authorization': `Bearer ${GRAFANA_API_KEY}`
         }
     });
+    if (!res.ok) {
+        return new Promise((resolve, reject) => {
+            reject('cannot get grafana image');
+        });
+    }
     const buf = await res.buffer();
 
     await minioClient.putObject(config.minio.bucket || '', `${params.host}/${params.panel}/${params.ts}/${params.duration}`, buf, { 'Content-Type': 'image/png' });
@@ -129,8 +134,13 @@ server.get('/', async (request, reply) => {
 
 server.get('/graph/:host/:panel/:ts/:duration', async (request, reply) => {
     const params: GraphParam = request.params as GraphParam;
-    const data = await getGrafanaGraph(params);
-    return reply.type('image/png').send(data);
+    try {
+        const data = await getGrafanaGraph(params);
+        return reply.type('image/png').send(data);
+    } catch (error) {
+        return reply.status(404).send();
+    }
+
 });
 
 const start = async () => {
