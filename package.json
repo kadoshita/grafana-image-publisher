@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/kadoshita/grafana-image-publisher#readme",
   "devDependencies": {
+    "@types/node-fetch": "^2.5.10",
     "@typescript-eslint/eslint-plugin": "^4.24.0",
     "@typescript-eslint/parser": "^4.24.0",
     "dotenv": "^10.0.0",
@@ -36,6 +37,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "fastify": "^3.17.0"
+    "fastify": "^3.17.0",
+    "node-fetch": "^2.6.1"
   }
 }
