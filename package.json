@@ -4,10 +4,10 @@
   "description": "TypeScript用のWebアプリテンプレート",
   "main": "dist/main.js",
   "scripts": {
+    "start": "node ./dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack serve --open --mode development",
-    "watch": "webpack --watch --mode development",
-    "build": "webpack --mode production",
+    "watch": "tsc -w",
+    "build": "tsc",
     "lint": "eslint ./src/ --ext .ts",
     "format": "prettier --write ./**/*.ts"
   },
@@ -34,5 +34,8 @@
     "webpack": "^5.37.1",
     "webpack-cli": "^4.7.0",
     "webpack-dev-server": "^3.11.2"
+  },
+  "dependencies": {
+    "fastify": "^3.17.0"
   }
 }
