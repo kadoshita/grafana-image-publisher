@@ -1,0 +1,18 @@
+{
+    "grafana": {
+        "url": "https://grafana.example.com/render/d-solo",
+        "dashboardId": "",
+        "dashboardName": "",
+        "orgId": 1,
+        "panels": [
+            {
+                "name": "",
+                "id": 1
+            }
+        ]
+    },
+    "minio": {
+        "url": "minio.example.com",
+        "bucket": "grafana-image"
+    }
+}
