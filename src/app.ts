@@ -1,6 +1,7 @@
 import fastify from 'fastify';
 import dotenv from 'dotenv';
 import fetch from 'node-fetch';
+import * as minio from 'minio';
 import { URLSearchParams } from 'url';
 
 import configJson from './config.json';
@@ -20,6 +21,7 @@ interface RequestParam {
 interface GraphParam {
     host: string;
     panel: string;
+    ts: number;
     duration: number;
 };
 
@@ -36,14 +38,59 @@ interface Config {
             }
         ];
     };
+    minio: {
+        url: string;
+        bucket: string;
+    };
 };
 
 const GRAFANA_API_KEY = process.env.GRAFANA_API_KEY;
+const MINIO_ACCESS_KEY = process.env.MINIO_ACCESS_KEY || '';
+const MINIO_SECRET_KEY = process.env.MINIO_SECRET_KEY || '';
 
 const config: Config = configJson as Config;
 
+const minioClient = new minio.Client({
+    endPoint: config.minio.url,
+    port: 443,
+    useSSL: true,
+    accessKey: MINIO_ACCESS_KEY,
+    secretKey: MINIO_SECRET_KEY
+});
+
+const getImageFromMinio = (param: GraphParam): Promise<Buffer> => {
+    return new Promise((resolve, reject) => {
+        minioClient.getObject(config.minio.bucket || '', `${param.host}/${param.panel}/${param.ts}/${param.duration}`, (err, res) => {
+            if (err) {
+                return reject(err);
+            }
+            const data: any[] = [];
+            res.on('data', chunk => {
+                data.push(chunk);
+            });
+            res.on('end', () => {
+                const buf = Buffer.concat(data);
+                resolve(buf);
+            });
+        });
+    });
+};
+
 const getGrafanaGraph = async (params: GraphParam) => {
-    const to = (new Date()).getTime();
+    const to = params.ts;
+
+    try {
+        const data = await getImageFromMinio(params);
+        if (data.length > 0) {
+            return new Promise((resolve, reject) => {
+                resolve(data);
+            });
+        }
+    } catch (err) {
+        console.info(`${err.code} create new file: ${err.resource}`);
+    }
+
+
     const from = to - (params.duration * 1000);
     const reqParams: RequestParam = {
         orgId: config.grafana.orgId,
@@ -66,7 +113,12 @@ const getGrafanaGraph = async (params: GraphParam) => {
             'Authorization': `Bearer ${GRAFANA_API_KEY}`
         }
     });
-    return res.buffer();
+    const buf = await res.buffer();
+
+    await minioClient.putObject(config.minio.bucket || '', `${params.host}/${params.panel}/${params.ts}/${params.duration}`, buf, { 'Content-Type': 'image/png' });
+    return new Promise((resolve, reject) => {
+        resolve(buf);
+    });
 };
 
 const server = fastify();
@@ -75,7 +127,7 @@ server.get('/', async (request, reply) => {
     return { status: 'OK' };
 });
 
-server.get('/graph/:host/:panel/:duration', async (request, reply) => {
+server.get('/graph/:host/:panel/:ts/:duration', async (request, reply) => {
     const params: GraphParam = request.params as GraphParam;
     const data = await getGrafanaGraph(params);
     return reply.type('image/png').send(data);
