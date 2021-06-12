@@ -1,7 +1,7 @@
 {
-  "name": "typescript-web-template",
+  "name": "grafana-image-publisher",
   "version": "0.0.1",
-  "description": "TypeScript用のWebアプリテンプレート",
+  "description": "Grafanaのグラフ画像を共有するプログラム",
   "main": "dist/main.js",
   "scripts": {
     "start": "node ./dist/app.js",
@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kadoshita/typescript-web-template.git"
+    "url": "git+https://github.com/kadoshita/grafana-image-publisher.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kadoshita/typescript-web-template/issues"
+    "url": "https://github.com/kadoshita/grafana-image-publisher/issues"
   },
-  "homepage": "https://github.com/kadoshita/typescript-web-template#readme",
+  "homepage": "https://github.com/kadoshita/grafana-image-publisher#readme",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.24.0",
     "@typescript-eslint/parser": "^4.24.0",

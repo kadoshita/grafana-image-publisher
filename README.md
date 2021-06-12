@@ -1,3 +1,10 @@
-# typescript-web-template
+# grafana-image-publisher
 
-TypeScript 用の Web アプリテンプレート
+Grafanaのグラフ画像を共有するプログラム
+
+GET /graph/:host/:panel/:duration
+
+/:host/:panel/:duration.pngが存在する→画像データを返す
+存在しない→画像をGrafanaから取得する
+画像を取得できた→/:host/:panel/:durationに画像を保存し、画像データを返す
+取得失敗→404を返す
