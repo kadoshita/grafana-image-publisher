@@ -2,6 +2,7 @@ import fastify from 'fastify';
 import dotenv from 'dotenv';
 import fetch from 'node-fetch';
 import * as minio from 'minio';
+import { IncomingMessage } from 'http';
 import { URLSearchParams } from 'url';
 import fs from 'fs';
 import path from 'path';
@@ -128,7 +129,12 @@ const getGrafanaGraph = async (params: GraphParam) => {
     });
 };
 
-const server = fastify();
+const server = fastify({
+    rewriteUrl: (req: IncomingMessage): string => {
+        const rewritePath = req.url?.replace(/^\/grafana-image-publisher/, '');
+        return rewritePath || '/';
+    }
+});
 
 server.get('/', async (request, reply) => {
     return { status: 'OK' };
