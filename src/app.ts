@@ -3,8 +3,8 @@ import dotenv from 'dotenv';
 import fetch from 'node-fetch';
 import * as minio from 'minio';
 import { URLSearchParams } from 'url';
-
-import configJson from './config.json';
+import fs from 'fs';
+import path from 'path';
 
 dotenv.config();
 
@@ -48,7 +48,9 @@ const GRAFANA_API_KEY = process.env.GRAFANA_API_KEY;
 const MINIO_ACCESS_KEY = process.env.MINIO_ACCESS_KEY || '';
 const MINIO_SECRET_KEY = process.env.MINIO_SECRET_KEY || '';
 
-const config: Config = configJson as Config;
+const configJson = fs.readFileSync(path.join(__dirname, '../config.json'), { encoding: 'utf-8' });
+
+const config: Config = JSON.parse(configJson) as Config;
 
 const minioClient = new minio.Client({
     endPoint: config.minio.url,
