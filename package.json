@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "fastify": "^3.17.0",
-    "minio": "^7.0.18",
+    "minio": "^7.1.1",
     "node-fetch": "^2.6.1"
   }
 }
